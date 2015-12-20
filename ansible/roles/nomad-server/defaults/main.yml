@@ -1,0 +1,5 @@
+---
+nomad_client: false
+nomad_server: true
+nomad_server_bootstrap_expect: 1
+nomad_bind_addr: "{{ ansible_host }}"

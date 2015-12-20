@@ -1,0 +1,13 @@
+{
+  "service": {
+    "name": "nomad-client",
+    "tags": ["infrastructure"],
+    "port": {{ nomad_ports_http }},
+    "check": {
+      "name": "alive-nomad-tcp-check",
+      "tcp": "{{ ansible_host }}:{{ nomad_ports_http }}",
+      "interval": "10s",
+      "timeout": "2s"
+    }
+  }
+}

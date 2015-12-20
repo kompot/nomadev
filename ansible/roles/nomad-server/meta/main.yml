@@ -1,0 +1,6 @@
+---
+dependencies:
+  - { role: kbrebanov.nomad }
+
+roles:
+  - kbrebanov.nomad

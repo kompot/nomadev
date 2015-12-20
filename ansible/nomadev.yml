@@ -4,9 +4,17 @@
     - common
     - consul-server
 
+- hosts: nomad
+
+  roles:
+    - common
+    - consul-client
+    - nomad-server
+
 - hosts: client*
 
   roles:
     - common
     - consul-client
+    - nomad-client
     - docker-host

@@ -2,3 +2,6 @@
   name: savagegus.consul
 
 - src: angstwad.docker_ubuntu
+
+- src: https://github.com/kompot/ansible-nomad
+  name: kbrebanov.nomad

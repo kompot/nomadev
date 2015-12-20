@@ -1,0 +1,8 @@
+- name: create consul service monitoring config
+  template:
+    src: 'nomad-client.json.j2'
+    dest: /etc/consul.d/nomad-client.json
+    mode: 0644
+
+- name: reload consul config after adding service
+  shell: /opt/consul/bin/consul reload

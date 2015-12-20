@@ -1,0 +1,17 @@
+#- name: create data directory for nomad
+#  file:
+#    path: /var/lib/nomad
+#    state: directory
+#    owner: nomad
+#    group: nomad
+#    recurse: yes
+
+- name: create consul service monitoring config
+  template:
+    src: 'nomad-server.json.j2'
+    dest: /etc/consul.d/nomad-server.json
+    mode: 0644
+
+- name: reload consul config after adding service
+  shell: /opt/consul/bin/consul reload
+
