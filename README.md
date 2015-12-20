@@ -36,7 +36,7 @@ ID                                    DC   Name     Class   Drain  Status
 ac53e70d-8a3b-bd96-8b35-111629e2bb0e  dc1  client1  <none>  false  ready
 ```
 
-to make sure Nomad server is visible from your host.
+This means Nomad server is visible from your host.
 
 Now you can run nomad jobs and have nomad schedule them
 
