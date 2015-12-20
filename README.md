@@ -12,10 +12,10 @@ On Mac OS X
 
 3. Ansible 1.9+ and install Ansible Galaxy requirements
 
-```
-brew install ansible
-ansible-galaxy install -r ansible/requirements.yml
-```
+   ```
+   brew install ansible
+   ansible-galaxy install -r ansible/requirements.yml
+   ```
 
 4. `vagrant up`
 
