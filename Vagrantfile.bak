@@ -1,0 +1,180 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+$base = <<SCRIPT
+sudo apt-get install -y unzip curl wget vim
+SCRIPT
+
+$nomad = <<SCRIPT
+echo Fetching Nomad
+cd /tmp/
+curl -sSL https://releases.hashicorp.com/nomad/0.2.3/nomad_0.2.3_linux_amd64.zip -o nomad.zip
+
+echo Installing Nomad
+rm -rf nomad
+unzip -o nomad.zip
+chmod +x nomad
+mv nomad /usr/bin/nomad
+
+mkdir -p /etc/nomad
+chmod a+w /etc/nomad
+
+SCRIPT
+
+
+$consul = <<SCRIPT
+# echo Fetching Consul
+# cd /tmp/
+# curl -sSL https://releases.hashicorp.com/consul/0.6.0/consul_0.6.0_linux_amd64.zip -o consul.zip
+# echo Installing Consul
+# rm -rf consul
+# unzip -o consul.zip
+# chmod +x consul
+# mv consul /usr/bin/consul
+SCRIPT
+
+$consulServer = <<SCRIPT
+echo Fetching Consul UI
+mkdir -p /tmp/consul/ui
+cd /tmp/consul/ui
+curl -sSL https://releases.hashicorp.com/consul/0.6.0/consul_0.6.0_web_ui.zip -o ui.zip
+unzip -o ui.zip
+cd
+sudo stop consul-server
+sudo cp consul-server.conf /etc/init/consul-server.conf
+sudo start consul-server
+SCRIPT
+
+$consulUiNginx = <<SCRIPT
+echo Setup Consul Web UI
+apt-get install -y nginx
+cp nginx.conf /etc/nginx/sites-enabled/default
+service nginx restart
+SCRIPT
+
+$consulClient0 = <<SCRIPT
+stop consul-client
+cp consul-client0.conf /etc/init/consul-client.conf
+start consul-client
+SCRIPT
+
+$consulClient1 = <<SCRIPT
+stop consul-client
+cp consul-client1.conf /etc/init/consul-client.conf
+start consul-client
+SCRIPT
+
+$consulClient2 = <<SCRIPT
+stop consul-client
+cp consul-client2.conf /etc/init/consul-client.conf
+start consul-client
+SCRIPT
+
+$nomadServer = <<SCRIPT
+stop nomad-server
+cp nomad-server.conf /etc/init/nomad-server.conf
+cp server.hcl /etc/nomad/server.hcl
+start nomad-server
+SCRIPT
+
+$nomadClient1 = <<SCRIPT
+stop nomad-client
+cp nomad-client1.conf /etc/init/nomad-client.conf
+cp client1.hcl /etc/nomad/client.hcl
+start nomad-client
+SCRIPT
+
+$nomadClient2 = <<SCRIPT
+stop nomad-client
+cp nomad-client2.conf /etc/init/nomad-client.conf
+cp client2.hcl /etc/nomad/client.hcl
+start nomad-client
+SCRIPT
+
+Vagrant.configure(2) do |config|
+  #config.vm.box = 'puphpet/ubuntu1404-x64'
+  config.vm.box = 'ubuntu/trusty64'
+
+  # Increase memory for Parallels Desktop
+  # config.vm.provider 'parallels' do |p, o|
+  #   p.memory = '4096'
+  # end
+
+  # Increase memory for Virtualbox
+  config.vm.provider 'virtualbox' do |vb|
+    vb.memory = '1024'
+  end
+
+  # Increase memory for VMware
+  # ['vmware_fusion', 'vmware_workstation'].each do |p|
+  #   config.vm.provider p do |v|
+  #     v.vmx['memsize'] = '4096'
+  #   end
+  # end
+
+  config.vm.define 'consul-server' do |v|
+    v.vm.hostname = 'consul-server'
+    v.vm.network 'public_network', bridge: 'en0: Wi-Fi (AirPort)', ip: '10.0.1.10'
+
+    v.vm.provision 'shell', inline: $base, privileged: false
+
+    v.vm.provision 'shell', inline: $consul
+    v.vm.provision 'file', source: 'consul-server.conf', destination: '/etc/init/consul-server.conf'
+    v.vm.provision 'shell', inline: $consulServer
+
+    v.vm.provision 'file', source: 'nginx.conf', destination: 'nginx.conf'
+    v.vm.provision 'shell', inline: $consulUiNginx, privileged: true
+  end
+
+  config.vm.define 'nomad-server' do |v|
+    v.vm.hostname = 'nomad-server'
+    v.vm.network 'public_network', bridge: 'en0: Wi-Fi (AirPort)', ip: '10.0.1.11'
+    v.vm.network 'forwarded_port', guest: 4646, host: 4640
+
+    v.vm.provision 'shell', inline: $base, privileged: false
+
+    v.vm.provision 'shell', inline: $consul, privileged: true
+    v.vm.provision 'file', source: 'consul-client0.conf', destination: 'consul-client0.conf'
+    v.vm.provision 'shell', inline: $consulClient0, privileged: true
+
+    v.vm.provision 'shell', inline: $nomad, privileged: true
+    v.vm.provision 'file', source: 'server.hcl', destination: 'server.hcl'
+    v.vm.provision 'file', source: 'nomad-server.conf', destination: 'nomad-server.conf'
+    v.vm.provision 'shell', inline: $nomadServer, privileged: true
+  end
+
+  config.vm.define 'client1' do |v|
+    v.vm.hostname = 'client1'
+    v.vm.network 'public_network', bridge: 'en0: Wi-Fi (AirPort)', ip: '10.0.1.12'
+
+    v.vm.provision 'docker'
+    v.vm.provision 'shell', inline: $base, privileged: false
+
+    v.vm.provision 'shell', inline: $consul, privileged: true
+    v.vm.provision 'file', source: 'consul-client1.conf', destination: 'consul-client1.conf'
+    v.vm.provision 'shell', inline: $consulClient1, privileged: true
+
+    v.vm.provision 'shell', inline: $nomad, privileged: true
+    v.vm.provision 'file', source: 'client1.hcl', destination: 'client1.hcl'
+    v.vm.provision 'file', source: 'nomad-client1.conf', destination: 'nomad-client1.conf'
+    v.vm.provision 'shell', inline: $nomadClient1, privileged: true
+  end
+
+  config.vm.define 'client2' do |v|
+    v.vm.hostname = 'client2'
+    v.vm.network 'public_network', bridge: 'en0: Wi-Fi (AirPort)', ip: '10.0.1.13'
+
+    v.vm.provision 'docker'
+    v.vm.provision 'shell', inline: $base, privileged: false
+
+    v.vm.provision 'shell', inline: $consul, privileged: true
+    v.vm.provision 'file', source: 'consul-client2.conf', destination: 'consul-client2.conf'
+    v.vm.provision 'shell', inline: $consulClient2, privileged: true
+
+    v.vm.provision 'shell', inline: $nomad, privileged: true
+    v.vm.provision 'file', source: 'client2.hcl', destination: 'client2.hcl'
+    v.vm.provision 'file', source: 'nomad-client2.conf', destination: 'nomad-client2.conf'
+    v.vm.provision 'shell', inline: $nomadClient2, privileged: true
+  end
+
+end

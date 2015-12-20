@@ -1,0 +1,9 @@
+---
+consul_version: "0.6.0"
+consul_archive: "consul_{{ consul_version }}_linux_amd64.zip"
+consul_download: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
+consul_datacenter: "local-datacenter"
+consul_bind_address: "{{ ansible_eth1['ipv4']['address'] }}"
+#consul_servers: ["{{ hostvars['consul']['host_ip'] }}"]
+consul_servers: ["192.168.10.10"]
+consul_join_at_start: true

@@ -1,0 +1,11 @@
+- hosts: consul
+
+  roles:
+    - common
+    - consul-server
+
+- hosts: client*
+
+  roles:
+    - common
+    - consul-client

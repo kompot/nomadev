@@ -1,0 +1,2 @@
+ - src: https://github.com/kompot/ansible-consul
+   name: savagegus.consul

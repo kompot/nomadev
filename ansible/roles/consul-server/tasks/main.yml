@@ -1,0 +1,7 @@
+- name: delete default nginx config (left by ansible consul)
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: restarted

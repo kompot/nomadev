@@ -1,0 +1,6 @@
+---
+dependencies:
+  - { role: savagegus.consul }
+
+roles:
+  - ansible-consul

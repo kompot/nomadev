@@ -1,0 +1,13 @@
+---
+consul_version: "0.6.0"
+consul_archive: "consul_{{ consul_version }}_linux_amd64.zip"
+consul_download: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_archive }}"
+consul_is_server: true
+consul_datacenter: "local-datacenter"
+consul_bootstrap: true
+consul_bind_address: "{{ ansible_eth1['ipv4']['address'] }}"
+
+consul_is_ui: true
+consul_ui_dir: "{{ consul_home }}"
+consul_ui_archive: "consul_{{ consul_version }}_web_ui.zip"
+consul_ui_download: "https://releases.hashicorp.com/consul/{{ consul_version }}/{{ consul_ui_archive }}"
