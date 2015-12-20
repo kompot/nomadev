@@ -1,9 +1,0 @@
-- name: packages
-  apt:
-    name: '{{ item }}'
-  with_items:
-    - docker.io
-
-- group: name=docker state=present
-
-- user: name=vagrant group=docker append=yes

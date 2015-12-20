@@ -1,0 +1,2 @@
+---
+docker_group_members: [ '{{ ansible_ssh_user }}' ]

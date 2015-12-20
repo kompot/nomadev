@@ -1,2 +1,4 @@
- - src: https://github.com/kompot/ansible-consul
-   name: savagegus.consul
+- src: https://github.com/kompot/ansible-consul
+  name: savagegus.consul
+
+- src: angstwad.docker_ubuntu
