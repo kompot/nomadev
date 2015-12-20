@@ -15,3 +15,5 @@
 - name: reload consul config after adding service
   shell: /opt/consul/bin/consul reload
 
+- include: nginx.yml
+

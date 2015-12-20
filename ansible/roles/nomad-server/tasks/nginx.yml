@@ -1,0 +1,21 @@
+- name: package nginx
+  apt:
+    name: '{{ item }}'
+  with_items:
+    - nginx
+
+- name: copy nomad nginx proxy config
+  template:
+    src: 'nginx.conf.j2'
+    dest: /etc/nginx/sites-enabled/nomad
+    mode: 0644
+
+- name: delete default nginx config (left by ansible consul)
+  file: path=/etc/nginx/sites-enabled/default state=absent
+
+- name: reload nginx
+  service:
+    name: nginx
+    state: restarted
+
+

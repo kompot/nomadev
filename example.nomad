@@ -36,7 +36,7 @@ job "example" {
   group "cache" {
     # Control the number of instances of this groups.
     # Defaults to 1
-    # count = 1
+    count = 1
 
     # Restart Policy - This block defines the restart policy for TaskGroups,
     # the attempts value defines the number of restarts Nomad will do if Tasks
@@ -107,8 +107,8 @@ job "example" {
       # this task to ensure it runs on a machine with
       # enough capacity.
       resources {
-        cpu = 500 # 500 Mhz
-        memory = 256 # 256MB
+        cpu = 200 # 500 Mhz
+        memory = 128 # 256MB
         network {
           mbits = 10
           port "db" {

@@ -23,7 +23,7 @@ Vagrant.configure(2) do |config|
   config.vm.define 'nomad' do |v|
     v.ssh.port = 2220
     v.vm.network 'forwarded_port', guest: 22, host: 2220
-    v.vm.network 'forwarded_port', guest: 4646, guest_ip: '192.168.10.20',  host: 4640
+    v.vm.network 'forwarded_port', guest: 80, host: 4646
 
     v.vm.hostname = 'nomad'
     v.vm.network 'private_network', ip: '192.168.10.20'
