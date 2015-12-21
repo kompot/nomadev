@@ -1,5 +1,5 @@
-- src: https://github.com/kompot/ansible-consul
-  name: savagegus.consul
+- src: savagegus.consul
+  version: master
 
 - src: angstwad.docker_ubuntu
 
