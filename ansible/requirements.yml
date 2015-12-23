@@ -4,3 +4,11 @@
 - src: angstwad.docker_ubuntu
 
 - src: kbrebanov.nomad
+
+# deps below this are conditional dependencies of savagegus.consul
+# and they are NOT installed via `ansible_local` provisioner, possibly
+# because of false fact gathering
+# (e. g. the first one is required for RedHat only)
+- src: geerlingguy.nginx
+
+- src: joshualund.golang
