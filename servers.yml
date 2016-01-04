@@ -1,20 +1,20 @@
 ---
 - name: "consul"
-  priv_ip: 192.168.10.10
+  priv_ip: 10.0.0.10
   forwarded_ports:
   - name: consul web ui
     guest: 80
     host: 8080
 
 - name: "nomad"
-  priv_ip: 192.168.10.20
+  priv_ip: 10.0.0.20
   forwarded_ports:
   - name: nomad http api
     guest: 80
     host: 4646
 
 - name: "client1"
-  priv_ip: 192.168.10.30
+  priv_ip: 10.0.0.30
 
 - name: "client2"
-  priv_ip: 192.168.10.40
+  priv_ip: 10.0.0.40

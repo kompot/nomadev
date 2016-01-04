@@ -14,9 +14,10 @@ Vagrant.configure(2) do |config|
 
   config.vm.box = 'ubuntu/trusty64'
   config.vm.box_check_update = false
+  # config.vm.provider 'virtualbox', memory: '1024'
 
-  config.vm.provider 'virtualbox' do |vb|
-    vb.memory = '1024'
+  config.vm.provider 'parallels' do |v, override|
+    override.vm.box = 'parallels/ubuntu-14.04'
   end
 
   f = File.open(inventoryPath,'w')
